@@ -1,3 +1,18 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+body {
+  margin: 0;
+  padding-top: 60px;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,51 +20,18 @@
   text-align: center;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  padding-top: 60px; /* Add padding to account for fixed navbar */
-}
-
-/* Add text shadow to all text for better readability against the animated background */
 h1, h2, h3, p, a, button, .nav-link {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+#gridBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .navbar {
@@ -110,15 +92,13 @@ h1, h2, h3, p, a, button, .nav-link {
 
 .profile {
   text-align: center;
-  margin-top: 4rem;
-  padding-top: 2rem;
+  margin: 2rem auto;
+  padding: 2rem;
   position: relative;
   z-index: 1;
   background-color: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border-radius: 15px;
-  margin: 2rem auto;
-  padding: 2rem;
   max-width: 800px;
 }
 
@@ -189,7 +169,6 @@ h1, h2, h3, p, a, button, .nav-link {
   backdrop-filter: blur(10px);
   border-radius: 15px;
   margin: 2rem auto;
-  padding: 2rem;
   max-width: 800px;
 }
 
@@ -198,5 +177,3 @@ h1, h2, h3, p, a, button, .nav-link {
   font-size: 2.5rem;
   color: #646cff;
 }
-
-/* Grid background is now handled by canvas */

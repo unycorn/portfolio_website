@@ -1,13 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>David Harper - Portfolio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="gridBackground"></canvas>
+    
+    <nav class="navbar">
+        <button class="nav-link" data-scroll-to="about">About</button>
+        <button class="nav-link" data-scroll-to="projects">Projects</button>
+        <button class="nav-link" data-scroll-to="contact">Contact</button>
+    </nav>
+
+    <div class="profile">
+        <img src="david_library.jpeg" alt="David Harper" class="profile-pic">
+        <h1>David Harper</h1>
+        <p>Physics Major | Aspiring Graduate Student</p>
+        <div class="links">
+            <a href="https://github.com/unycorn" target="_blank" class="link">GitHub</a>
+            <a href="https://linkedin.com/sdavidsquark" target="_blank" class="link">LinkedIn</a>
+        </div>
+    </div>
+
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <p>I am a physics major with a passion for quantum mechanics and computational physics.</p>
+    </section>
+
+    <section id="projects" class="section">
+        <h2>Projects</h2>
+        <p>Here are some of my notable projects in physics and programming.</p>
+    </section>
+
+    <section id="contact" class="section">
+        <h2>Contact</h2>
+        <p>Get in touch with me through LinkedIn or GitHub.</p>
+    </section>
+
+    <script src="script.js"></script>
+</body>
 </html>
