@@ -213,6 +213,8 @@ const noteFrequencies = {
     'u': 466.16, // A#4
 };
 
+octave_shift = 0; // Default octave
+
 // Set up event listeners
 document.addEventListener('click', () => {
     if (audioContext.state === 'suspended') {
@@ -225,21 +227,33 @@ document.addEventListener('click', () => {
 document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
     if (noteFrequencies[key]) {
-        synth.playNote(noteFrequencies[key]);
+        synth.playNote(noteFrequencies[key] * 2 ** octave_shift);
+
+        x = Math.random() * canvas.width;
+        y = Math.random() * canvas.height;
+        console.log('Keyboard wave canvas pos:', x, y);
+        // Create multiple waves at a random position
+        for (let i = 0; i < 5; i++) {
+            waves.push(new Wave(x, y, Date.now() + 150*i, Math.exp(0-(i/3)**2)/2));
+        }
     }
-    x = Math.random() * canvas.width;
-    y = Math.random() * canvas.height;
-    console.log('Keyboard wave canvas pos:', x, y);
-    // Create multiple waves at a random position
-    for (let i = 0; i < 5; i++) {
-        waves.push(new Wave(x, y, Date.now() + 150*i, Math.exp(0-(i/3)**2)/2));
+    if (key === 'arrowright') {
+        octave_shift = Math.min(octave_shift + 1, 2); // Max 2 octaves up
+    } else if (key === 'arrowleft') {
+        octave_shift = Math.max(octave_shift - 1, -2); // Min 2 octaves down
+    }
+    if (key === 'escape') {
+        synth.activeOscillators.forEach((_, frequency) => {
+            synth.stopNote(frequency);
+        });
+        waves = []; // Clear all waves
     }
 });
 
 document.addEventListener('keyup', (e) => {
     const key = e.key.toLowerCase();
     if (noteFrequencies[key]) {
-        synth.stopNote(noteFrequencies[key]);
+        synth.stopNote(noteFrequencies[key] * 2 ** octave_shift);
     }
 });
 
