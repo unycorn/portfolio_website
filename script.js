@@ -18,28 +18,32 @@ let waves = [];
 console.log('Canvas element:', canvas);
 
 class Wave {
-    constructor(x, y) {
+    constructor(x, y, birthTime, startStrength = 1) {
         this.x = x;
         this.y = y;
         this.radius = 0;
-        this.speed = 2;
+        this.speed = 4;
         this.maxRadius = Math.max(canvas.width, canvas.height) * 3.0;
-        this.strength = 1;
-        this.birthTime = Date.now();
+        this.strength = startStrength
+        this.startStrength = startStrength;
+        this.birthTime = birthTime;
+        this.age = (Date.now() - this.birthTime) / 1000;
     }
 
     update() {
-        this.radius += this.speed;
-        // Smoother strength decay
-        const age = (Date.now() - this.birthTime) / 1000;
-        this.strength = Math.max(0, 1 - (age * 0.5));
+        this.age = (Date.now() - this.birthTime) / 1000;
+        if (this.age > 0) {
+            this.radius += this.speed;
+            this.strength = Math.max(0, this.startStrength - (this.age * 0.5));
+        }
         return this.strength > 0;
     }
 
     getInfluence(x, y) {
+        if (this.age <= 0) return 0;
+
         const distance = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
         const waveFront = Math.abs(distance - this.radius);
-        // Sharper wave front with higher intensity
         return Math.exp(-waveFront * 0.04) * this.strength;
     }
 }
@@ -50,7 +54,10 @@ canvas.addEventListener('click', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     console.log('Click canvas pos:', x, y);
-    waves.push(new Wave(x, y));
+
+    for (let i = 0; i < 5; i++) {
+        waves.push(new Wave(x, y, Date.now() + 150*i, Math.exp(0-(i/3)**2)/2));
+    }
 });
 
 // Add pointer-events style directly to canvas
@@ -219,6 +226,13 @@ document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
     if (noteFrequencies[key]) {
         synth.playNote(noteFrequencies[key]);
+    }
+    x = Math.random() * canvas.width;
+    y = Math.random() * canvas.height;
+    console.log('Keyboard wave canvas pos:', x, y);
+    // Create multiple waves at a random position
+    for (let i = 0; i < 5; i++) {
+        waves.push(new Wave(x, y, Date.now() + 150*i, Math.exp(0-(i/3)**2)/2));
     }
 });
 
