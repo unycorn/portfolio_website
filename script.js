@@ -14,7 +14,8 @@ const cellSize = 25;
 let animationFrame;
 
 function animate() {
-    const time = Date.now() / 2500;
+    const speed = 5000;
+    const time = Date.now() / speed;
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
