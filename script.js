@@ -45,11 +45,11 @@ class Wave {
 }
 
 canvas.addEventListener('click', (e) => {
-    console.log('Canvas clicked!', e.clientX, e.clientY);
+    // Get position relative to the canvas itself
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left + window.scrollX;
-    const y = e.clientY - rect.top + window.scrollY;
-    console.log('Adding wave at:', x, y);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    console.log('Click canvas pos:', x, y);
     waves.push(new Wave(x, y));
 });
 
