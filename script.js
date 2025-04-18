@@ -38,6 +38,68 @@ function animate() {
 
 animate();
 
+class HadamardMatrix {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.minOrder = 3; // Start with 8x8 matrix (2^3)
+        this.maxOrder = 8; // Up to 256x256 matrix (2^8)
+        this.order = this.minOrder;
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
+        this.render();
+    }
+
+    resizeCanvas() {
+        const containerWidth = this.canvas.parentElement.clientWidth;
+        const size = Math.min(containerWidth, 512); // Max size of 512px
+        this.canvas.width = size;
+        this.canvas.height = size;
+        this.render();
+    }
+
+    // Check if position (i,j) should be black in the Hadamard matrix
+    isNegative(i, j) {
+        let count = 0;
+        let combined = i & j;
+        while (combined > 0) {
+            count += combined & 1;
+            combined >>= 1;
+        }
+        return count % 2 !== 0;
+    }
+
+    render() {
+        const size = 1 << this.order; // 2^order
+        const blockSize = this.canvas.width / size;
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                this.ctx.fillStyle = this.isNegative(i, j) ? '#000000' : '#FFFFFF';
+                this.ctx.fillRect(j * blockSize, i * blockSize, blockSize, blockSize);
+            }
+        }
+    }
+
+    incrementOrder() {
+        this.order = this.order >= this.maxOrder ? this.minOrder : this.order + 1;
+        this.render();
+    }
+}
+
+// Initialize Hadamard visualization when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('hadamardCanvas');
+    if (canvas) {
+        const matrix = new HadamardMatrix(canvas);
+        canvas.addEventListener('click', () => {
+            matrix.incrementOrder();
+        });
+    }
+});
+
 // Smooth Scrolling
 document.querySelectorAll('.nav-link').forEach(button => {
     button.addEventListener('click', (e) => {

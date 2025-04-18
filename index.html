@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>David Harper - Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <canvas id="gridBackground"></canvas>
@@ -27,12 +29,31 @@
 
     <section id="about" class="section">
         <h2>About Me</h2>
-        <p>I am a physics major with a passion for quantum mechanics and computational physics.</p>
+        <p>Currently pursuing a double major in Physics and Mathematics at Iowa State University (Class of 2026). I work at Ames National Laboratory, focusing on theoretical physics and modeling of metasurfaces. My research combines computational methods with fundamental physics to advance our understanding of optical phenomena.</p>
+        <p>I bring extensive experience in scientific computing, with particular expertise in Python, C++, and numerical methods. This technical foundation enables me to tackle complex physical simulations and computational challenges in both academic research and practical applications.</p>
     </section>
 
     <section id="projects" class="section">
         <h2>Projects</h2>
         <p>Here are some of my notable projects in physics and programming.</p>
+        
+        <div class="project-card">
+            <img src="heart_background_twilight.png" alt="Laplacian Eigenfunction Visualization" class="project-image">
+            <p class="project-equation">\[\nabla^2\psi = k\psi, \quad \left. \psi \right|_{\heartsuit} = 0\]</p>
+            <h3 class="project-title">Laplacian Eigenfunction Visualization</h3>
+            <p class="project-description">
+                This visualization represents the eigenfunctions of the Laplacian operator, which I computed through custom numerical methods. Originally shared on <a href="https://www.reddit.com/r/math/comments/1gtqy41/eigenfunctions_of_laplacian_on_heartshaped_domain/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button" target="_blank">r/math</a>, the project demonstrates the beautiful intersection of mathematics, physics, and computational visualization. The code's versatility caught the attention of a UC Riverside professor, who reached out to adapt my implementation for analyzing microbiota data patterns in flies, showcasing how mathematical tools can bridge seemingly unrelated scientific domains.
+            </p>
+        </div>
+        
+        <div class="project-card">
+            <canvas id="hadamardCanvas" width="512" height="512"></canvas>
+            <p class="project-equation">\[H_{2^n} = \begin{bmatrix} H_{2^{n-1}} & H_{2^{n-1}} \\ H_{2^{n-1}} & -H_{2^{n-1}} \end{bmatrix}, \quad H_1 = [1]\]</p>
+            <h3 class="project-title">Fast Hadamard Matrix Computation with GLSL</h3>
+            <p class="project-description">
+                Developed a high-performance GLSL shader implementation for computing Hadamard matrices using bitwise operations. Traditional approaches rely on recursive algorithms, but this implementation achieves full parallelization through GPU computing. By leveraging binary arithmetic and the parallel nature of fragment shaders, the computation achieves maximum efficiency without the overhead of recursion. Click the visualization above to see higher-order Hadamard matrices rendered in real-time.
+            </p>
+        </div>
     </section>
 
     <section id="contact" class="section">
