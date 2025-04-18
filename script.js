@@ -40,7 +40,7 @@ class Wave {
         const distance = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
         const waveFront = Math.abs(distance - this.radius);
         // Sharper wave front with higher intensity
-        return Math.exp(-waveFront * 0.02) * this.strength;
+        return Math.exp(-waveFront * 0.04) * this.strength;
     }
 }
 
