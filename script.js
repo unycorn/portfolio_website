@@ -104,6 +104,131 @@ function animate() {
 
 animate();
 
+// Audio Setup
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+class Synth {
+    constructor() {
+        this.activeOscillators = new Map();
+        this.setupEffects();
+    }
+
+    setupEffects() {
+        // Create delay effect
+        this.delay = audioContext.createDelay();
+        this.delay.delayTime.value = 0.25;
+        
+        this.delayGain = audioContext.createGain();
+        this.delayGain.gain.value = 0.3;
+        
+        this.feedback = audioContext.createGain();
+        this.feedback.gain.value = 0.3;
+        
+        // Create main output chain
+        this.mainGain = audioContext.createGain();
+        this.mainGain.gain.value = 0.5;
+        
+        // Connect delay feedback loop
+        this.delay.connect(this.feedback);
+        this.feedback.connect(this.delay);
+        
+        // Connect main output chain
+        this.mainGain.connect(audioContext.destination);
+        this.mainGain.connect(this.delay);
+        this.delay.connect(this.delayGain);
+        this.delayGain.connect(audioContext.destination);
+    }
+
+    playNote(frequency) {
+        if (audioContext.state !== 'running') {
+            audioContext.resume();
+        }
+
+        if (this.activeOscillators.has(frequency)) return;
+
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = 'triangle';
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.005);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.mainGain);
+        
+        oscillator.start();
+        this.activeOscillators.set(frequency, { oscillator, gainNode });
+    }
+
+    stopNote(frequency) {
+        if (!this.activeOscillators.has(frequency)) return;
+        
+        const { oscillator, gainNode } = this.activeOscillators.get(frequency);
+        const now = audioContext.currentTime;
+        
+        gainNode.gain.cancelScheduledValues(now);
+        gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+        gainNode.gain.linearRampToValueAtTime(0, now + 0.05);
+        
+        setTimeout(() => {
+            oscillator.stop();
+            oscillator.disconnect();
+            gainNode.disconnect();
+        }, 60);
+        
+        this.activeOscillators.delete(frequency);
+    }
+}
+
+// Create synth instance
+const synth = new Synth();
+
+// Note frequencies mapping (piano keys with black keys on number row)
+const noteFrequencies = {
+    // White keys (bottom row)
+    'a': 261.63, // C4
+    's': 293.66, // D4
+    'd': 329.63, // E4
+    'f': 349.23, // F4
+    'g': 392.00, // G4
+    'h': 440.00, // A4
+    'j': 493.88, // B4
+    'k': 523.25, // C5
+    'l': 587.33, // D5
+    
+    // Black keys (top number row)
+    'w': 277.18, // C#4
+    'e': 311.13, // D#4
+    't': 369.99, // F#4
+    'y': 415.30, // G#4
+    'u': 466.16, // A#4
+};
+
+// Set up event listeners
+document.addEventListener('click', () => {
+    if (audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+            console.log('AudioContext resumed successfully');
+        });
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+    if (noteFrequencies[key]) {
+        synth.playNote(noteFrequencies[key]);
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    const key = e.key.toLowerCase();
+    if (noteFrequencies[key]) {
+        synth.stopNote(noteFrequencies[key]);
+    }
+});
+
 class HadamardMatrix {
     constructor(canvas) {
         this.canvas = canvas;
